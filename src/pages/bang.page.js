@@ -1,6 +1,19 @@
 import E from '../lib/elements';
 import {ThreeColumnGrid} from '../layouts/grid';
 
+const wikipediaSearchUrl = query => {
+  let params = {
+    callback: '?',
+    srsearch: encodeURIComponent(query),
+    action: 'query',
+    list: 'search',
+    format: 'json',
+    origin: '*'
+  };
+  return 'https://en.wikipedia.org/w/api.php?' +
+    Object.keys(params).map(k => k + '=' + params[k]).join('&');
+};
+
 const TestPage = E.div().children([
   E.h1()
     .text('Bang bang development'),
@@ -34,11 +47,8 @@ const TestPage = E.div().children([
         .css('button')
         .text('Search')
         .on('click', function(e) {
-          let query = encodeURIComponent(E.find('#search').dom().value);
-          let url = 'https://en.wikipedia.org/w/api.php?callback=?&srsearch=' + query + '&action=query&list=search&format=json&origin=*';
-
+          let url = wikipediaSearchUrl(E.find('#search').dom().value);
           E.find('#result').text('Loading..');
-
           E.ajax(url, false)
             .then(function(data) {
               // wikipedia has some funky json
