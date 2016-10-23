@@ -14,10 +14,7 @@ const MenuItems = () => Router.items().map(
 
 const Menu = E.ul()
   .attr('id', 'menu')
-  .children(
-    MenuItems()
-  )
-  .routeChange(function(/*route*/) {
+  .routeChange(function() {
     this.children(MenuItems())
   });
 
