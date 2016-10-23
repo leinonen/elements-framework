@@ -129,16 +129,22 @@ let E = ELEMENTS.reduce((api, tag) => {
  * @param url
  * @returns {Promise}
  */
-E.ajax = function(url) {
+E.ajax = function(url, parse=true) {
   return new Promise((resolve, reject) => {
     let xhr = new XMLHttpRequest();
     xhr.open('get', url, true);
+    xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
     xhr.onreadystatechange = function() {
       // https://xhr.spec.whatwg.org/#dom-xmlhttprequest-readystate
       if (xhr.readyState == 4) { // `DONE`
         let status = xhr.status;
         if (status == 200) {
-          resolve(JSON.parse(xhr.responseText));
+          if (parse) {
+            resolve(JSON.parse(xhr.responseText));
+          } else {
+            resolve(xhr.responseText);
+          }
+
         } else {
           reject(status);
         }

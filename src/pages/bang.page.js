@@ -25,7 +25,46 @@ const TestPage = E.div().children([
     ],
     [
       E.h4().text('Header 3'),
-      E.p().text('This is the third column')
+      E.p().text('This is the third column'),
+      E.input()
+        .attr('type', 'text')
+        .attr('id', 'search')
+        .value('illuminati'),
+      E.button()
+        .css('button')
+        .text('Search')
+        .on('click', function(e) {
+          let query = encodeURIComponent(E.find('#search').dom().value);
+          let url = 'https://en.wikipedia.org/w/api.php?callback=?&srsearch=' + query + '&action=query&list=search&format=json&origin=*';
+
+          E.find('#result').text('Loading..');
+
+          E.ajax(url, false)
+            .then(function(data) {
+              // wikipedia has some funky json
+              let result = JSON.parse(data.substring(5, data.length - 1));
+              return result.query.search;
+            })
+            .then(function(results) {
+
+              let mapItem = item => E.li()
+                .children([
+                  E.h4().text(item.title),
+                  E.p().html(item.snippet)
+                ]);
+
+              E.find('#result').children([
+                E.ul().children(results.map(mapItem))
+              ]);
+
+            })
+            .catch(function(err) {
+              console.log(err);
+            });
+
+        }),
+      E.div()
+        .attr('id', 'result')
     ]
   )
 ]);
