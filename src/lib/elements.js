@@ -104,7 +104,7 @@ function create(elem, tag) {
 
   api.exec = function(callback, wait) {
     if (typeof callback === 'function') {
-      setTimeout(callback.bind(this), wait);
+      setTimeout(callback.bind(this), wait || 0);
     }
     return api;
   };
