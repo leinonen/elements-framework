@@ -7,11 +7,21 @@ const TestPage = E.div().children([
   ThreeColumnGrid(
     [
       E.h4().text('Header 1'),
-      E.p().text('This is the first column')
+      E.p().text('This is the first column'),
+      E.input()
+        .attr('type', 'text')
+        .value('')
+        .on('keyup', function(e) {
+          E.publish('magic', e.target.value)
+        })
     ],
     [
       E.h4().text('Header 2'),
-      E.p().text('This is the second column')
+      E.p()
+        .text('This is the second column')
+        .subscribe('magic', function(value) {
+          this.text(value);
+        })
     ],
     [
       E.h4().text('Header 3'),

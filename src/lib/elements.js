@@ -43,6 +43,11 @@ function create(elem, tag) {
     return api;
   };
 
+  api.value = function(value) {
+    el.value = value;
+    return api;
+  };
+
   api.html = function(html) {
     el.innerHTML = html;
     return api;
