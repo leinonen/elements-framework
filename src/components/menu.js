@@ -8,8 +8,11 @@ const Menu = E.ul()
 
       Router.items().map(
         route => E.li()
-          .text(route.name)
-          .on('click', () => Router.navigate(route.path))
+          .children([
+            E.a()
+              .text(route.name)
+              .attr('href', '#' + route.path)
+          ])
       )
 
     )

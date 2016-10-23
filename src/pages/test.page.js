@@ -1,6 +1,6 @@
 import E from '../lib/elements';
 
-import TwoColumnGrid from '../layouts/two-column-grid';
+import {TwoColumnGrid} from '../layouts/grid';
 import TwoColumnTable from '../components/two-column-table';
 
 const TestPage = E.div()
