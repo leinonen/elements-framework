@@ -65,7 +65,10 @@ function create(elem, tag) {
   };
 
   api.css = function(css) {
-    el.classList.add.apply(el.classList, css.split(' '));
+    let classList = css.split(' ').filter(a => a.length > 0);
+    if (classList.length > 0) {
+      el.classList.add.apply(el.classList, classList);
+    }
     return api;
   };
 
@@ -79,7 +82,15 @@ function create(elem, tag) {
     return api;
   };
 
+  api.routeChange = function(callback) {
+    document.addEventListener('elements-router-change', function(e) {
+      callback.bind(api)(e.detail);
+    });
+    return api;
+  };
+
   api.children = function(children) {
+    api.clear();
     children.forEach(child => el.appendChild(child.dom()));
     return api;
   };

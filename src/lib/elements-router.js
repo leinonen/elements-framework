@@ -6,8 +6,18 @@
 
 function Router() {
   let _routes = [];
+  let activeRoute = '';
   let router = {};
   let targetSelector = null;
+
+  function dispatchRoute(path) {
+    var event = new CustomEvent('elements-router-change', {
+      'detail': {
+        route: path
+      }
+    });
+    document.dispatchEvent(event);
+  }
 
   router.target = function (selector) {
     targetSelector = selector;
@@ -27,7 +37,8 @@ function Router() {
   router.items = function() {
     return _routes.map(r => ({
       path: r.path,
-      name: r.name
+      name: r.name,
+      active: r.path === activeRoute
     }));
   };
 
@@ -49,6 +60,8 @@ function Router() {
   };
 
   router.changeRoute = function (path) {
+    activeRoute = path;
+    dispatchRoute(path);
     let r = _routes.filter(rt => rt.path === path);
     if (r.length > 0) {
       let targetEl = document.querySelector(targetSelector);
