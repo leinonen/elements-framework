@@ -4,13 +4,12 @@
 
 .beautiful {
   color: yellowgreen;
-  font-size: 8em;
   background-color: black;
-  margin: 0;
 }
 
 .micro {
   font-size: 20px;
+  white-space: nowrap;
 }
 
 button {

@@ -4,28 +4,23 @@
  * By Peter Leinonen 2016
  */
 
-let ajax = function (api, url, successHandler, errorHandler) {
-  let xhr = new XMLHttpRequest();
-  xhr.open('get', url, true);
-  xhr.onreadystatechange = function () {
-    let status;
-    let data;
-    // https://xhr.spec.whatwg.org/#dom-xmlhttprequest-readystate
-    if (xhr.readyState == 4) { // `DONE`
-      status = xhr.status;
-      if (status == 200) {
-        data = JSON.parse(xhr.responseText);
-        successHandler && successHandler.bind(api)(data);
-      } else {
-        errorHandler && errorHandler.bind(api)(status);
-      }
-    }
-  };
-  xhr.send();
-};
+const ELEMENTS = [
+  'div', 'span', 'pre', 'code',
+  'h1', 'h2', 'h3', 'h4', 'h5',
+  'a', 'p', 'button',
+  'ul', 'ol', 'li',
+  'input', 'form',
+  'table', 'tr', 'td', 'th', 'tbody'
+];
 
-function create(tag) {
-  let el = document.createElement(tag);
+/**
+ * Create a wrapper around a DOM element so we can chain calls.
+ * @param elem
+ * @param tag
+ * @returns {null}
+ */
+function create(elem, tag) {
+  let el = elem || document.createElement(tag);
   let api = Object.create(null);
 
   api.wrap = function(elem) {
@@ -34,41 +29,42 @@ function create(tag) {
     return wrapper;
   };
 
-  api.find = function (selector) {
-    el = document.querySelector(selector);
-    return api;
-  };
-
-  api.handler = function (callback) {
+  api.handler = function(callback) {
     callback();
     return api;
   };
 
-  api.query = function (selector) {
-    let obj = document.querySelectorAll(selector);
-    return Array.prototype.slice.call(obj, 0);
-  };
-
-  api.dom = function () {
+  api.dom = function() {
     return el;
   };
 
-  api.text = function (txt) {
+  api.text = function(txt) {
     el.innerText = txt;
     return api;
   };
 
-  api.html = function (html) {
+  api.html = function(html) {
     el.innerHTML = html;
     return api;
   };
 
-  api.attr = function (attr, value) {
+  api.clear = function() {
+    el.innerHTML = '';
+    return api;
+  };
+
+  api.content = function(element) {
+    el.innerHTML = '';
+    el.appendChild(element.dom());
+    return api;
+  };
+
+  api.attr = function(attr, value) {
     el.setAttribute(attr, value);
     return api;
   };
 
-  api.css = function (css) {
+  api.css = function(css) {
     el.classList.add.apply(el.classList, css.split(' '));
     return api;
   };
@@ -78,23 +74,21 @@ function create(tag) {
     return api;
   };
 
-  api.on = function (name, callback) {
+  api.on = function(name, callback) {
     el.addEventListener(name, callback.bind(api));
     return api;
   };
 
-  api.clear = function () {
-    el.innerHTML = '';
-    return api;
-  };
-
-  api.children = function (children) {
+  api.children = function(children) {
     children.forEach(child => el.appendChild(child.dom()));
     return api;
   };
 
-  api.appendTo = function (target) {
-    document.querySelector(target).appendChild(el)
+  api.appendTo = function(target) {
+    let targetEl = document.querySelector(target);
+    if (targetEl) {
+      targetEl.appendChild(el);
+    }
   };
 
   api.exec = function(callback, wait) {
@@ -104,24 +98,57 @@ function create(tag) {
     return api;
   };
 
-  api.ajax = function (url) {
-    return new Promise((resolve, reject) => {
-      ajax(api, url, function (data) {
-        resolve.bind(this)(data);
-      }, function (err) {
-        reject.bind(this)(err);
-      });
-    });
-  };
-
   return api;
 }
 
-const ELEMENTS = ['div', 'span', 'h1', 'h2', 'h3', 'h4', 'p', 'button', 'ul', 'li', 'a', 'input', 'form'];
 
-let E = ELEMENTS.reduce((prev, tag) => {
-  prev[tag] = () => create(tag);
-  return prev;
+// Wrap common DOM elements for our API.
+let E = ELEMENTS.reduce((api, tag) => {
+  api[tag] = () => create(null, tag);
+  return api;
 }, {});
+
+/**
+ * Basic AJAX implementation using standard XMLHttpRequest.
+ * @param url
+ * @returns {Promise}
+ */
+E.ajax = function(url) {
+  return new Promise((resolve, reject) => {
+    let xhr = new XMLHttpRequest();
+    xhr.open('get', url, true);
+    xhr.onreadystatechange = function() {
+      // https://xhr.spec.whatwg.org/#dom-xmlhttprequest-readystate
+      if (xhr.readyState == 4) { // `DONE`
+        let status = xhr.status;
+        if (status == 200) {
+          resolve(JSON.parse(xhr.responseText));
+        } else {
+          reject(status);
+        }
+      }
+    };
+    xhr.send();
+  });
+};
+
+/**
+ * Find a single DOM element, and wrap it with our API.
+ * @param selector
+ * @returns wrapped DOM element.
+ */
+E.find = function(selector) {
+  return create(document.querySelector(selector));
+};
+
+/**
+ * Find one or many DOM elements, wrapped with our API.
+ * @param selector
+ * @returns {Array} of DOM elements instead of NodeList for convenience.
+ */
+E.query = function(selector) {
+  let obj = document.querySelectorAll(selector);
+  return Array.prototype.slice.call(obj, 0).map(create);
+};
 
 export default E;

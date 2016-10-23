@@ -1,55 +1,43 @@
 import E from '../lib/elements';
 
-const twoColumnGrid = (col1, col2) =>
-  E.div()
-  .css('container')
-  .children([
-    E.div()
-      .css('row')
-      .children([
-        E.div().css('column').children(col1),
-        E.div().css('column').children(col2)
-      ])
-  ]);
-
-
+import TwoColumnGrid from '../layouts/two-column-grid';
+import TwoColumnTable from '../components/two-column-table';
 
 const TestPage = E.div()
   .children([
-    E.h1()
-      .text('This is a test page'),
-    E.p()
-      .text('Lets try some AJAX!'),
-    twoColumnGrid(
+    E.h1().text('This is a test page'),
+    E.p().text('Lets try some AJAX!'),
+    TwoColumnGrid(
       [
+        E.h4()
+          .text('First column'),
+        E.p()
+          .text('It is very easy to build complex layouts'),
         E.button()
           .css('button')
           .text('Click to fetch random number')
           .on('click', function(/*e*/) {
-            this
-              .ajax('api/random')
+            E.ajax('api/random')
               .then(data =>
-                this.find('#ajaxDemo').text('Response: ' + data)
+                E.find('#ajaxDemo').text('Response: ' + data)
               )
           }),
         E.button()
           .css('button')
           .text('Click to fetch data')
           .on('click', function(/*e*/) {
-            this
-              .ajax('api/test')
+            E.ajax('api/test')
               .then(data =>
-                this.find('#ajaxDemo').
-                text(
-                  'Response: ' + data.map(a => `${a.name} (${a.url})`).join(',')
-                )
+                E.find('#ajaxDemo').content(TwoColumnTable(data))
               )
           })
       ],
       [
+        E.h4()
+          .text('Second column'),
         E.p()
-          .attr('id', 'ajaxDemo')
-          .text('Click button to get a random number')
+          .text('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur id lectus sed massa finibus pharetra. Etiam aliquam dapibus lobortis.'),
+        E.div().attr('id', 'ajaxDemo')
       ]
     )
   ]);

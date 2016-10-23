@@ -45,7 +45,7 @@ app.get('/api/test', (req, res, next) => {
 });
 
 app.get('/api/random', (req, res, next) => {
-  res.json(Math.random() * 1000);
+  res.json(Math.floor(Math.random() * 1000));
 });
 
 

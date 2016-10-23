@@ -15,25 +15,25 @@ let application = E.div()
     Menu,
     E.div()
       .attr('id', 'content')
-  ])
-
-application.appendTo('body');
+  ]).appendTo('body');
 
 Router
-  .target(application.find('#content').dom())
-  .addRoute({
-    path: '/',
-    name: 'Home',
-    component: HomePage
-  })
-  .addRoute({
-    path: '/test',
-    name: 'Test',
-    component: TestPage
-  })
-  .addRoute({
-    path: '/bang',
-    name: 'Bang Bang!',
-    component: BangPage
-  })
+  .target('#content')
+  .configure([
+    {
+      path: '/',
+      name: 'Home',
+      component: HomePage
+    },
+    {
+      path: '/test',
+      name: 'Test',
+      component: TestPage
+    },
+    {
+      path: '/bang',
+      name: 'Bang Bang!',
+      component: BangPage
+    }
+  ])
   .listen();

@@ -5,22 +5,27 @@
  */
 
 function Router() {
-  let routes = [];
+  let _routes = [];
   let router = {};
-  let targetEL = null;
+  let targetSelector = null;
 
-  router.target = function (el) {
-    targetEL = el;
+  router.target = function (selector) {
+    targetSelector = selector;
+    return router;
+  };
+
+  router.configure = function(routes) {
+    _routes = routes;
     return router;
   };
 
   router.addRoute = function (route) {
-    routes.push(route);
+    _routes.push(route);
     return router;
   };
 
   router.items = function() {
-    return routes.map(r => ({
+    return _routes.map(r => ({
       path: r.path,
       name: r.name
     }));
@@ -44,12 +49,13 @@ function Router() {
   };
 
   router.changeRoute = function (path) {
-    let r = routes.filter(rt => rt.path === path);
+    let r = _routes.filter(rt => rt.path === path);
     if (r.length > 0) {
-      while (targetEL.firstChild) {
-        targetEL.removeChild(targetEL.firstChild);
+      let targetEl = document.querySelector(targetSelector);
+      while (targetEl.firstChild) {
+        targetEl.removeChild(targetEl.firstChild);
       }
-      targetEL.appendChild(r[0].component.dom());
+      targetEl.appendChild(r[0].component.dom());
     } else {
       console.log('route not found:', path);
       router.navigate('/');
