@@ -4,22 +4,25 @@
  * By Peter Leinonen 2016
  */
 
+import E from './elements';
+
 function Router() {
   let _routes = [];
   let activeRoute = '';
   let router = {};
   let targetSelector = null;
 
-  function dispatchRoute(path) {
-    var event = new CustomEvent('elements-router-change', {
+  const dispatchRoute = path => {
+    document.dispatchEvent(new CustomEvent('elements-router-change', {
       'detail': {
         route: path
       }
-    });
-    document.dispatchEvent(event);
-  }
+    }));
+  };
 
-  router.target = function (selector) {
+  const extractPathFromHash = value => value.split('#')[1];
+
+  router.target = function(selector) {
     targetSelector = selector;
     return router;
   };
@@ -29,8 +32,18 @@ function Router() {
     return router;
   };
 
-  router.addRoute = function (route) {
+  router.addRoute = function(route) {
     _routes.push(route);
+    return router;
+  };
+
+  router.listen = function() {
+    window.addEventListener('hashchange', function(e) {
+      router.changeRoute(extractPathFromHash(e.newURL));
+    });
+    let initialHash = extractPathFromHash(location.hash) || '/';
+    router.navigate(initialHash);
+    router.changeRoute(initialHash);
     return router;
   };
 
@@ -42,38 +55,21 @@ function Router() {
     }));
   };
 
-  router.listen = function () {
-    window.addEventListener('hashchange', function (e) {
-      let hash = e.newURL.split('#')[1];
-      console.log('route change', hash);
-      router.changeRoute(hash);
-    });
-    let initialHash = location.hash.split('#')[1] || '/';
-    router.navigate(initialHash);
-    router.changeRoute(initialHash);
-    return router;
-  };
-
-  router.navigate = function (path) {
+  router.navigate = function(path) {
     location.hash = path;
-    return router;
   };
 
-  router.changeRoute = function (path) {
-    activeRoute = path;
-    dispatchRoute(path);
-    let r = _routes.filter(rt => rt.path === path);
-    if (r.length > 0) {
-      let targetEl = document.querySelector(targetSelector);
-      while (targetEl.firstChild) {
-        targetEl.removeChild(targetEl.firstChild);
-      }
-      targetEl.appendChild(r[0].component.dom());
+  router.changeRoute = function(path) {
+    let matchedRoutes = _routes.filter(rt => rt.path === path);
+    if (matchedRoutes.length > 0) {
+      E.find(targetSelector).content(matchedRoutes[0].component);
+      activeRoute = path;
+      dispatchRoute(path);
+      console.log('route changed to:', path);
     } else {
       console.log('route not found:', path);
       router.navigate('/');
     }
-    return router;
   };
 
   return router;

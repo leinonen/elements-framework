@@ -41,7 +41,10 @@ ul#menu li {
   text-transform: uppercase;
 }
 
-ul#menu li.active a,
+ul#menu li.active a {
+  color: black;
+}
+
 ul#menu li:hover a {
   color: red;
 }

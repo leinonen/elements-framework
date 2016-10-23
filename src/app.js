@@ -8,14 +8,15 @@ import HomePage from './pages/home.page';
 import TestPage from './pages/test.page';
 import BangPage from './pages/bang.page';
 
-let application = E.div()
+E.div()
   .css('container')
   .children([
     Header,
     Menu,
     E.div()
       .attr('id', 'content')
-  ]).appendTo('body');
+  ])
+  .appendTo('body');
 
 Router
   .target('#content')

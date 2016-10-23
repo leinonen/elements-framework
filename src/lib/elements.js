@@ -158,8 +158,8 @@ E.find = function(selector) {
  * @returns {Array} of DOM elements instead of NodeList for convenience.
  */
 E.query = function(selector) {
-  let obj = document.querySelectorAll(selector);
-  return Array.prototype.slice.call(obj, 0).map(create);
+  let elements = document.querySelectorAll(selector);
+  return Array.prototype.slice.call(elements, 0).map(create);
 };
 
 export default E;
