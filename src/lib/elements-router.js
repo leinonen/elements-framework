@@ -12,14 +12,6 @@ function Router() {
   let router = {};
   let targetSelector = null;
 
-  const dispatchRoute = path => {
-    document.dispatchEvent(new CustomEvent('elements-router-change', {
-      'detail': {
-        route: path
-      }
-    }));
-  };
-
   const extractPathFromHash = value => value.split('#')[1];
 
   router.target = function(selector) {
@@ -62,9 +54,11 @@ function Router() {
   router.changeRoute = function(path) {
     let matchedRoutes = _routes.filter(rt => rt.path === path);
     if (matchedRoutes.length > 0) {
-      E.find(targetSelector).content(matchedRoutes[0].component);
       activeRoute = path;
-      dispatchRoute(path);
+      E.find(targetSelector).content(matchedRoutes[0].component);
+      E.publish('elements-router-change', {
+        route: path
+      });
       console.log('route changed to:', path);
     } else {
       console.log('route not found:', path);

@@ -82,8 +82,8 @@ function create(elem, tag) {
     return api;
   };
 
-  api.routeChange = function(callback) {
-    document.addEventListener('elements-router-change', function(e) {
+  api.subscribe = function(event, callback) {
+    document.addEventListener(event, function(e) {
       callback.bind(api)(e.detail);
     });
     return api;
@@ -160,6 +160,17 @@ E.find = function(selector) {
 E.query = function(selector) {
   let elements = document.querySelectorAll(selector);
   return Array.prototype.slice.call(elements, 0).map(create);
+};
+
+/**
+ * Publish events.
+ * @param event
+ * @param message
+ */
+E.publish = function(event, message) {
+  document.dispatchEvent(new CustomEvent(event, {
+    'detail': message
+  }));
 };
 
 export default E;
