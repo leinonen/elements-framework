@@ -1,4 +1,4 @@
-import E from './elements';
+import E from '../lib/elements';
 
 export const div = (children) => E.div().children(children);
 export const p = (text) => E.p().text(text);

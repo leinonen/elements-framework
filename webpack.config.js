@@ -1,12 +1,17 @@
 var webpack = require('webpack');
 var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 var HotModuleReplacementPlugin = webpack.HotModuleReplacementPlugin;
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var path = require('path');
 var env = require('yargs').argv.mode || 'dev-server';
 
 var libraryName = 'app';
 
 var plugins = [], outputFile;
+
+plugins.push(new ExtractTextPlugin('style.css', {
+  allChunks: true
+}));
 
 if (env === 'build') {
   plugins.push(new UglifyJsPlugin({ minimize: true }));
@@ -43,7 +48,17 @@ var config = {
   },
   module: {
     loaders: [
-      { test: /\.js$/,  loader: 'babel', include: SRC_PATH }
+      {
+        test: /\.js$/,
+        loader: 'babel',
+        include: SRC_PATH
+      },
+      {
+        test: /\.css$/,
+        // https://github.com/webpack/extract-text-webpack-plugin/issues/215
+        loader: ExtractTextPlugin.extract('style', 'css-loader'),
+        include: SRC_PATH
+      },
       /*{ test: /\.js$/,  loader: 'eslint-loader', include: SRC_PATH },*/
     ]
   },

@@ -1,7 +1,7 @@
 import E from '../lib/elements';
 
 import {TwoColumnGrid} from '../layouts/grid';
-import TwoColumnTable from '../components/two-column-table';
+import TwoColumnTable from '../utils/two-column-table';
 
 const fetchRandomNumber = (e) => {
   E.ajax('api/random')
@@ -29,11 +29,11 @@ const TestPage = E.div()
           .text('It is very easy to build complex layouts'),
         E.button()
           .css('button')
-          .text('Click to fetch random number')
+          .text('Fetch random number')
           .on('click', fetchRandomNumber),
         E.button()
           .css('button float-right')
-          .text('Click to fetch data')
+          .text('Fetch data')
           .on('click', fetchSomeData),
          E.div().attr('id', 'ajaxDemo')
       ],

@@ -1,0 +1,13 @@
+.bold {
+  font-weight: bold;
+}
+
+.beautiful {
+  color: yellowgreen;
+  background-color: black;
+}
+
+.micro {
+  font-size: 20px;
+  white-space: nowrap;
+}

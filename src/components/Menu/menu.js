@@ -1,5 +1,6 @@
-import E from '../lib/elements';
-import Router from '../lib/elements-router';
+import E from '../../lib/elements';
+import Router from '../../lib/elements-router';
+import css from './menu.css';
 
 const MenuItems = () => Router.items().map(
   route =>

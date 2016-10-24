@@ -1,0 +1,13 @@
+.wiki-results {
+  float: left;
+  width: 100%;
+}
+
+.wiki-results ul {
+  list-style-type: none;
+  margin: 0;
+}
+
+.wiki-results .searchmatch {
+  color: #9b4dca;
+}

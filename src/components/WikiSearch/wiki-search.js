@@ -1,4 +1,5 @@
-import E from '../lib/elements';
+import E from '../../lib/elements';
+import css from './wiki-search.css';
 
 const wikipediaSearchUrl = query => {
   let params = {

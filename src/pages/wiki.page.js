@@ -1,9 +1,7 @@
 import E from '../lib/elements';
-import {p, h1, h4, div, textInput} from '../lib/elements-helpers';
+import {p, h1, h4, div, textInput} from '../utils/elements-helpers';
 import {TwoColumnGrid} from '../layouts/grid';
-import WikiSearch from '../components/wiki-search';
-
-
+import WikiSearch from '../components/WikiSearch/wiki-search';
 
 const WikiPage = div([
   h1('Wikipedia API test page'),

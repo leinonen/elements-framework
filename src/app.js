@@ -1,8 +1,8 @@
 import E from './lib/elements';
 import Router from './lib/elements-router';
 
-import Header from './components/header';
-import Menu from './components/menu';
+import Header from './components/Header/header';
+import Menu from './components/Menu/menu';
 
 import HomePage from './pages/home.page';
 import TestPage from './pages/test.page';
