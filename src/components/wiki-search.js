@@ -13,19 +13,44 @@ const wikipediaSearchUrl = query => {
     Object.keys(params).map(k => k + '=' + params[k]).join('&');
 };
 
+// wikipedia has some funky json
+const parseWikipediaResponse = (data) => {
+  let result = JSON.parse(data.substring(5, data.length - 1));
+  return result.query.search;
+};
+
 const search = (query) => E
-  .ajax(wikipediaSearchUrl(query), false)
-  .then(function(data) {
-    // wikipedia has some funky json
-    let result = JSON.parse(data.substring(5, data.length - 1));
-    return result.query.search;
-  });
+  .ajax(wikipediaSearchUrl(query), false) // false = manual parsing
+  .then(parseWikipediaResponse);
 
 let wikiResultRow = item => E.li()
   .children([
     E.h4().text(item.title),
     E.p().html(item.snippet)
   ]);
+
+const makeList = (items, mapper) => E.ul().children(items.map(mapper));
+
+const performSearch = (e) => {
+  E.find('#result').text('Loading..');
+  let query = E.find('#search').dom().value;
+
+  search(query)
+    .then(results => {
+      E.find('#result').children([
+        makeList(results, wikiResultRow)
+      ]);
+    })
+    .catch(err => {
+      console.log(err);
+      E.find('#result').text('Error loading result');
+    });
+
+};
+
+const clearResults = (e) => {
+  E.find('#result').clear();
+};
 
 const WikiSearch = E.div().children(
   [
@@ -38,28 +63,11 @@ const WikiSearch = E.div().children(
     E.button()
       .css('button')
       .text('Search')
-      .on('click', function(e) {
-        E.find('#result').text('Loading..');
-        let query = E.find('#search').dom().value;
-
-        search(query)
-          .then(function(results) {
-            E.find('#result').children([
-              E.ul().children(results.map(wikiResultRow))
-            ]);
-          })
-          .catch(function(err) {
-            console.log(err);
-            E.find('#result').text('Error loading result');
-          });
-
-      }),
+      .on('click', performSearch),
     E.button()
       .css('button button-outline float-right')
       .text('Clear results')
-      .on('click', function(e) {
-        E.find('#result').clear();
-      })
+      .on('click', clearResults)
     ,
     E.div()
       .css('wiki-results')
