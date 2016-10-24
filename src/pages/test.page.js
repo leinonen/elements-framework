@@ -3,6 +3,20 @@ import E from '../lib/elements';
 import {TwoColumnGrid} from '../layouts/grid';
 import TwoColumnTable from '../components/two-column-table';
 
+const fetchRandomNumber = (e) => {
+  E.ajax('api/random')
+    .then(data => {
+      E.find('#ajaxDemo').text('Response: ' + data)
+    });
+};
+
+const fetchSomeData = (e) => {
+  E.ajax('api/test')
+    .then(data => {
+      E.find('#ajaxDemo').content(TwoColumnTable(data))
+    });
+};
+
 const TestPage = E.div()
   .children([
     E.h1().text('This is a test page'),
@@ -16,21 +30,11 @@ const TestPage = E.div()
         E.button()
           .css('button')
           .text('Click to fetch random number')
-          .on('click', function(/*e*/) {
-            E.ajax('api/random')
-              .then(data =>
-                E.find('#ajaxDemo').text('Response: ' + data)
-              )
-          }),
+          .on('click', fetchRandomNumber),
         E.button()
           .css('button float-right')
           .text('Click to fetch data')
-          .on('click', function(/*e*/) {
-            E.ajax('api/test')
-              .then(data =>
-                E.find('#ajaxDemo').content(TwoColumnTable(data))
-              )
-          }),
+          .on('click', fetchSomeData),
          E.div().attr('id', 'ajaxDemo')
       ],
       [
