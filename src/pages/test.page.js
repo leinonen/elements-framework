@@ -23,21 +23,32 @@ const TestPage = E.div()
               )
           }),
         E.button()
-          .css('button')
+          .css('button float-right')
           .text('Click to fetch data')
           .on('click', function(/*e*/) {
             E.ajax('api/test')
               .then(data =>
                 E.find('#ajaxDemo').content(TwoColumnTable(data))
               )
-          })
+          }),
+         E.div().attr('id', 'ajaxDemo')
       ],
       [
         E.h4()
-          .text('Second column'),
+          .text('Header 1'),
         E.p()
-          .text('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur id lectus sed massa finibus pharetra. Etiam aliquam dapibus lobortis.'),
-        E.div().attr('id', 'ajaxDemo')
+          .text('This is the first column'),
+        E.input()
+          .attr('type', 'text')
+          .on('keyup', (e) => E.publish('magic', e.target.value)),
+        E.h4()
+          .text('Header 2'),
+        E.p()
+          .text('This is the second column')
+          .subscribe('magic', function(value) {
+            this.text(value);
+          })
+
       ]
     )
   ]);

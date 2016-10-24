@@ -6,7 +6,7 @@ import Menu from './components/menu';
 
 import HomePage from './pages/home.page';
 import TestPage from './pages/test.page';
-import BangPage from './pages/bang.page';
+import WikiPage from './pages/wiki.page';
 
 E.div()
   .css('container')
@@ -32,9 +32,9 @@ Router
       component: TestPage
     },
     {
-      path: '/bang',
-      name: 'Bang Bang!',
-      component: BangPage
+      path: '/wikipedia',
+      name: 'Search Wikipedia',
+      component: WikiPage
     }
   ])
   .listen();

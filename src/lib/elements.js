@@ -7,7 +7,7 @@
 const ELEMENTS = [
   'div', 'span', 'pre', 'code',
   'h1', 'h2', 'h3', 'h4', 'h5',
-  'a', 'p', 'button',
+  'a', 'p', 'button', 'img',
   'ul', 'ol', 'li',
   'input', 'form',
   'table', 'tr', 'td', 'th', 'tbody'
