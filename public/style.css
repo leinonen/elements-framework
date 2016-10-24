@@ -62,3 +62,7 @@ button {
   list-style-type: none;
   margin: 0;
 }
+
+.wiki-results .searchmatch {
+  color: #9b4dca;
+}
