@@ -1,4 +1,4 @@
-import E from '../lib/elements';
+import E from '../lib/elements-core';
 
 export const Container = (children) => E.div().css('container').children(children);
 export const Row = (children) => E.div().css('row').children(children);

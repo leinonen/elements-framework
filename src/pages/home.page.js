@@ -1,4 +1,4 @@
-import E from '../lib/elements';
+import E from '../lib/elements-core';
 
 const TestPage = E.div()
   .children([
@@ -11,7 +11,7 @@ const TestPage = E.div()
     E.ul()
       .children([
         'Simple chainable API',
-        'Simple Router',
+        'Router with parameters',
         'AJAX',
         'Publish / Subscribe messaging'
       ].map(item => E.li().text(item)))

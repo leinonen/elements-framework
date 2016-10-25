@@ -1,4 +1,4 @@
-import E from '../lib/elements';
+import E from '../lib/elements-core';
 
 import {TwoColumnGrid} from '../layouts/grid';
 import TwoColumnTable from '../utils/two-column-table';

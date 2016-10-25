@@ -1,4 +1,5 @@
-import E from '../../lib/elements';
+import E from '../../lib/elements-core';
+import Router from '../../lib/elements-router';
 import css from './wiki-search.css';
 
 const wikipediaSearchUrl = query => {
@@ -53,6 +54,14 @@ const clearResults = (e) => {
   E.find('#result').clear();
 };
 
+const searchQueryParam = () => {
+  let params = Router.params();
+  if (params && params.query) {
+    E.find('#search').value(params.query);
+    E.find('#searchButton').dom().click();
+  }
+};
+
 const WikiSearch = E.div().children(
   [
     E.h4().text('Wikipedia search'),
@@ -62,8 +71,11 @@ const WikiSearch = E.div().children(
       .attr('id', 'search')
       .value('illuminati'),
     E.button()
+      .attr('id', 'searchButton')
       .css('button')
       .text('Search')
+      .exec(searchQueryParam, 10)
+      .subscribe('elements-router-change', searchQueryParam)
       .on('click', performSearch),
     E.button()
       .css('button button-outline float-right')

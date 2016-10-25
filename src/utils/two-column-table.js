@@ -1,4 +1,4 @@
-import E from '../lib/elements';
+import E from '../lib/elements-core';
 
 const TwoColumnTable = (data) => E.table()
   .children(

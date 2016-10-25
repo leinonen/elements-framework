@@ -23,14 +23,8 @@ function create(elem, tag) {
   let el = elem || document.createElement(tag);
   let api = Object.create(null);
 
-  api.wrap = function(elem) {
-    let wrapper = create('div');
-    wrapper.el = elem;
-    return wrapper;
-  };
-
-  api.handler = function(callback) {
-    callback();
+  api.click = function() {
+    el.click();
     return api;
   };
 
@@ -77,8 +71,8 @@ function create(elem, tag) {
     return api;
   };
 
-  api.toggleClass = function(klass) {
-    el.classList.toggle(klass);
+  api.toggleClass = function(className) {
+    el.classList.toggle(className);
     return api;
   };
 

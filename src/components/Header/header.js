@@ -1,4 +1,4 @@
-import E from '../../lib/elements';
+import E from '../../lib/elements-core';
 import css from './header.css';
 
 const Header = E.h1()

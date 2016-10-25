@@ -4,13 +4,15 @@
  * By Peter Leinonen 2016
  */
 
-import E from './elements';
+import E from './elements-core';
+import {lookupRoute} from './elements-router-utils';
 
 function Router() {
   let _routes = [];
   let activeRoute = '';
   let router = {};
   let targetSelector = null;
+  let _params = null;
 
   const extractPathFromHash = value => value.split('#')[1];
 
@@ -21,11 +23,6 @@ function Router() {
 
   router.configure = function(routes) {
     _routes = routes;
-    return router;
-  };
-
-  router.addRoute = function(route) {
-    _routes.push(route);
     return router;
   };
 
@@ -44,7 +41,11 @@ function Router() {
       path: r.path,
       name: r.name,
       active: r.path === activeRoute
-    }));
+    })).filter(r => r.path.indexOf(':') === -1);
+  };
+
+  router.params = function() {
+    return _params;
   };
 
   router.navigate = function(path) {
@@ -52,7 +53,22 @@ function Router() {
   };
 
   router.changeRoute = function(path) {
-    let matchedRoutes = _routes.filter(rt => rt.path === path);
+    _params = null;
+    let matchRoute = lookupRoute(_routes, path);
+    if (matchRoute) {
+      _params = matchRoute.params;
+      activeRoute = path;
+      E.find(targetSelector).content(matchRoute.route.component);
+      E.publish('elements-router-change', {
+        route: path
+      });
+      console.log('route changed to:', path);
+      console.log('params', matchRoute.params);
+    } else {
+      console.log('ROUTE NOT FOUND', path);
+      router.navigate('/');
+    }
+    /*let matchedRoutes = _routes.filter(rt => rt.path === path);
     if (matchedRoutes.length > 0) {
       activeRoute = path;
       E.find(targetSelector).content(matchedRoutes[0].component);
@@ -63,7 +79,7 @@ function Router() {
     } else {
       console.log('route not found:', path);
       router.navigate('/');
-    }
+    }*/
   };
 
   return router;

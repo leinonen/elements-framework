@@ -1,4 +1,4 @@
-import E from './lib/elements';
+import E from './lib/elements-core';
 import Router from './lib/elements-router';
 
 import Header from './components/Header/header';
@@ -30,6 +30,11 @@ Router
       path: '/test',
       name: 'Test',
       component: TestPage
+    },
+    {
+      path: '/wikipedia/:query',
+      name: 'Search Wikipedia',
+      component: WikiPage
     },
     {
       path: '/wikipedia',

@@ -1,4 +1,4 @@
-import E from '../lib/elements';
+import E from '../lib/elements-core';
 import {p, h1, h4, div, textInput} from '../utils/elements-helpers';
 import {TwoColumnGrid} from '../layouts/grid';
 import WikiSearch from '../components/WikiSearch/wiki-search';

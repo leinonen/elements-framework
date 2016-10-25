@@ -1,4 +1,4 @@
-import E from '../../lib/elements';
+import E from '../../lib/elements-core';
 import Router from '../../lib/elements-router';
 import css from './menu.css';
 
