@@ -68,18 +68,6 @@ function Router() {
       console.log('ROUTE NOT FOUND', path);
       router.navigate('/');
     }
-    /*let matchedRoutes = _routes.filter(rt => rt.path === path);
-    if (matchedRoutes.length > 0) {
-      activeRoute = path;
-      E.find(targetSelector).content(matchedRoutes[0].component);
-      E.publish('elements-router-change', {
-        route: path
-      });
-      console.log('route changed to:', path);
-    } else {
-      console.log('route not found:', path);
-      router.navigate('/');
-    }*/
   };
 
   return router;
