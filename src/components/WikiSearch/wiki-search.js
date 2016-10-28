@@ -58,7 +58,7 @@ const searchQueryParam = () => {
   let params = Router.params();
   if (params && params.query) {
     E.find('#search').value(params.query);
-    E.find('#searchButton').dom().click();
+    performSearch();
   }
 };
 
