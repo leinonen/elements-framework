@@ -117,6 +117,7 @@ function create(elem, tag) {
     if (targetEl) {
       targetEl.appendChild(el);
     }
+    return api;
   };
 
   api.exec = function(callback, wait) {
