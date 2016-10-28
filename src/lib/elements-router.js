@@ -13,6 +13,7 @@ function Router() {
   let router = {};
   let targetSelector = null;
   let _params = null;
+  let pageCache = {};
 
   const extractPathFromHash = value => value.split('#')[1];
 
@@ -58,7 +59,21 @@ function Router() {
     if (matchRoute) {
       _params = matchRoute.params;
       activeRoute = path;
-      E.find(targetSelector).content(matchRoute.route.component);
+
+      // Cache pages that are functions. used for lazy loading
+      if (typeof matchRoute.route.component === 'function') {
+        let cacheKey = matchRoute.route.component.name;
+        let cached = pageCache[cacheKey];
+        if (cached) {
+          E.find(targetSelector).content(cached);
+        } else {
+          pageCache[cacheKey] = matchRoute.route.component();
+          E.find(targetSelector).content(pageCache[cacheKey]);
+        }
+      } else {
+        E.find(targetSelector).content(matchRoute.route.component);
+      }
+
       E.publish('elements-router-change', {
         route: path
       });

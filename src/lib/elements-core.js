@@ -23,11 +23,6 @@ function create(elem, tag) {
   let el = elem || document.createElement(tag);
   let api = Object.create(null);
 
-  api.click = function() {
-    el.click();
-    return api;
-  };
-
   api.dom = function() {
     return el;
   };
@@ -58,7 +53,12 @@ function create(elem, tag) {
 
   api.content = function(element) {
     api.clear();
-    el.appendChild(element.dom());
+    if (typeof element === 'function') {
+      el.appendChild(element().dom());
+    } else {
+      el.appendChild(element.dom());
+    }
+
     return api;
   };
 
@@ -104,7 +104,13 @@ function create(elem, tag) {
 
   api.children = function(children) {
     api.clear();
-    children.forEach(child => el.appendChild(child.dom()));
+    children.forEach(child => {
+      if (typeof child === 'function') {
+        el.appendChild(child().dom());
+      } else {
+        el.appendChild(child.dom());
+      }
+    });
     return api;
   };
 
@@ -161,7 +167,7 @@ E.ajax = function(url, parse=true) {
  * @param selector
  * @returns wrapped DOM element.
  */
-E.find = function(selector) {
+E.find = function find(selector) {
   return create(document.querySelector(selector));
 };
 
@@ -170,7 +176,7 @@ E.find = function(selector) {
  * @param selector
  * @returns {Array} of DOM elements instead of NodeList for convenience.
  */
-E.query = function(selector) {
+E.query = function query(selector) {
   let elements = document.querySelectorAll(selector);
   return Array.prototype.slice.call(elements, 0).map(create);
 };
@@ -180,7 +186,7 @@ E.query = function(selector) {
  * @param event
  * @param message
  */
-E.publish = function(event, message) {
+E.publish = function publish(event, message) {
   document.dispatchEvent(new CustomEvent(event, {
     'detail': message
   }));

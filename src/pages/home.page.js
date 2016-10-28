@@ -1,20 +1,23 @@
 import E from '../lib/elements-core';
 
-const TestPage = E.div()
-  .children([
-    E.h1()
-      .text('Welcome!'),
-    E.p()
-      .text('This is an example application using the Elements Micro DOM Framework!'),
-    E.p()
-      .html('You can do lots of <strong>crazy stuff</strong> with it. Here are some of its features:'),
-    E.ul()
-      .children([
-        'Simple chainable API',
-        'Router with parameters',
-        'AJAX',
-        'Publish / Subscribe messaging'
-      ].map(item => E.li().text(item)))
-  ]);
+const HomePage = () => {
+  console.log(HomePage.name, 'lazy loaded');
+  return E.div()
+    .children([
+      E.h1()
+        .text('Welcome!'),
+      E.p()
+        .text('This is an example application using the Elements Micro DOM Framework!'),
+      E.p()
+        .html('You can do lots of <strong>crazy stuff</strong> with it. Here are some of its features:'),
+      E.ul()
+        .children([
+          'Simple chainable API',
+          'Router with parameters',
+          'AJAX',
+          'Publish / Subscribe messaging'
+        ].map(item => E.li().text(item)))
+    ]);
+};
 
-export default TestPage;
+export default HomePage;
