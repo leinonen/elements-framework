@@ -171,16 +171,22 @@ E.ajax = function(url, parse=true) {
  * Hyperscript inspired element constructor.
  * @param selector
  */
-E.h = function h(selector) {
+E.h = function h(selector, param) {
   let hashSplit = selector.split('#');
   let dotSplit = selector.split('.');
   let tag = hashSplit[0] || dotSplit[0];
   let id = (hashSplit[1]).split('.')[0];
   let css = dotSplit.slice(1);
 
-  return create(null, tag)
+  let api = create(null, tag)
     .attr('id', id)
     .css(css.join(' '));
+
+  if (typeof param === 'string') {
+    api.text(param);
+  }
+
+  return api;
 };
 
 /**
