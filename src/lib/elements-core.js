@@ -43,8 +43,6 @@ function create(elem, tag) {
   };
 
   api.clear = function() {
-    // http://stackoverflow.com/questions/3955229/remove-all-child-elements-of-a-dom-node-in-javascript
-    // el.innerHTML = ''; // This is slow
     while (el.firstChild) {
       el.removeChild(el.firstChild);
     }
@@ -125,6 +123,13 @@ function create(elem, tag) {
     if (typeof callback === 'function') {
       setTimeout(callback.bind(this), wait || 0);
     }
+    return api;
+  };
+
+  api.extend = function(name, callback) {
+    api[name] = function() {
+      callback.apply(api, arguments);
+    };
     return api;
   };
 
