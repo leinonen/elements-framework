@@ -13,10 +13,10 @@ const MenuItems = () => Router.items().map(
       ])
 );
 
-const Menu = E.ul()
-  .attr('id', 'menu')
-  .subscribe('elements-router-change', function() {
-    this.children(MenuItems())
-  });
+const redrawItems = function() {
+  this.children(MenuItems())
+};
+
+const Menu = E.h('ul#menu').subscribe('elements-router-change', redrawItems);
 
 export default Menu;
