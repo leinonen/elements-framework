@@ -163,6 +163,22 @@ E.ajax = function(url, parse=true) {
 };
 
 /**
+ * Hyperscript inspired element constructor.
+ * @param selector
+ */
+E.h = function h(selector) {
+  let hashSplit = selector.split('#');
+  let dotSplit = selector.split('.');
+  let tag = hashSplit[0] || dotSplit[0];
+  let id = (hashSplit[1]).split('.')[0];
+  let css = dotSplit.slice(1);
+
+  return create(null, tag)
+    .attr('id', id)
+    .css(css.join(' '));
+};
+
+/**
  * Find a single DOM element, and wrap it with our API.
  * @param selector
  * @returns wrapped DOM element.
