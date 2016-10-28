@@ -48,12 +48,16 @@ function create(elem, tag) {
   };
 
   api.clear = function() {
-    el.innerHTML = '';
+    // http://stackoverflow.com/questions/3955229/remove-all-child-elements-of-a-dom-node-in-javascript
+    // el.innerHTML = ''; // This is slow
+    while (el.firstChild) {
+      el.removeChild(el.firstChild);
+    }
     return api;
   };
 
   api.content = function(element) {
-    el.innerHTML = '';
+    api.clear();
     el.appendChild(element.dom());
     return api;
   };
@@ -73,6 +77,16 @@ function create(elem, tag) {
 
   api.toggleClass = function(className) {
     el.classList.toggle(className);
+    return api;
+  };
+
+  api.addClass = function(className) {
+    el.classList.add(className);
+    return api;
+  };
+
+  api.removeClass = function(className) {
+    el.classList.remove(className);
     return api;
   };
 
@@ -128,19 +142,13 @@ E.ajax = function(url, parse=true) {
     let xhr = new XMLHttpRequest();
     xhr.open('get', url, true);
     xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
-    xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = () => {
       // https://xhr.spec.whatwg.org/#dom-xmlhttprequest-readystate
-      if (xhr.readyState == 4) { // `DONE`
-        let status = xhr.status;
-        if (status == 200) {
-          if (parse) {
-            resolve(JSON.parse(xhr.responseText));
-          } else {
-            resolve(xhr.responseText);
-          }
-
+      if (xhr.readyState == 4) { // DONE
+        if (xhr.status == 200) {
+          resolve(parse ? JSON.parse(xhr.responseText) : xhr.responseText);
         } else {
-          reject(status);
+          reject(xhr.status);
         }
       }
     };
